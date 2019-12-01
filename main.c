@@ -22,7 +22,6 @@
  */
 
 #include <avr/io.h>
-#include <util/delay.h>
 #include <avr/interrupt.h>
 
 void load_h20();
@@ -44,14 +43,10 @@ int main(void)
     // enable global interrupts
     sei();
 
-    set_input(PORTB,1)
-
     while(1)
     {
-        if(pin_is_set(PORTB,1)){
-            load_h20(660);
-        }
-
+        output_high(PORTB,6);
+        //load_h20(660);
     }
     return 0;               /* never reached */
 }
@@ -61,14 +56,14 @@ void load_h20(uint16_t mLiters)
     float const H20_PUMP_ML_PER_SEC = 28.33;
     if(isH20Loading == FALSE){
         start_timer1();
-        output_high(PORTA,5);
+        output_high(PORTB,6);
         isH20Loading = TRUE;
     }
 
     if(isH20Loading == TRUE){
         if((mLiters / H20_PUMP_ML_PER_SEC) >= seconds){
             stop_timer1();
-            output_low(PORTA,5);
+            output_low(PORTB,6);
             isH20Loading = FALSE;
         }
     }
@@ -77,7 +72,7 @@ void load_h20(uint16_t mLiters)
 ISR (TIMER1_COMPA_vect){
     //increment seconds counter
     seconds++;
-{
+}
 
 void start_timer1(){
     // set up timer with prescaler = 64 and CTC mode
@@ -93,7 +88,7 @@ void start_timer1(){
     seconds = 0;
 
     // enable compare interrupt
-    TIMSK |= (1 << OCIE1A);
+    TIMSK1 |= (1 << OCIE1A);
 }
 
 void stop_timer1(){
@@ -101,6 +96,6 @@ void stop_timer1(){
     TCCR1B &= ~((1 << WGM12)|(1 << CS11)|(1 << CS10));
 
     //disable timer interrupt
-    TIMSK &= ~(1 << OCIE1A);
+    TIMSK1 &= ~(1 << OCIE1A);
 }
 
