@@ -18,7 +18,7 @@
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 
 DEVICE     = atmega168p
-CLOCK      = 16000000
+CLOCK      = 1000000
 PROGRAMMER = #-c stk500v2 -P avrdoper
 OBJECTS    = main.o
 FUSES      = -U lfuse:w:0x62:m -U hfuse:w:0xdf:m
@@ -35,12 +35,12 @@ FUSES      = -U lfuse:w:0x62:m -U hfuse:w:0xdf:m
 #        | +------------------ WDTON (if set to 0, watchdog is always on)
 #        +-------------------- RSTDISBL (if set to 0, RESET pin is disabled)
 # Fuse low byte:
-# 0x24 = 0 0 1 0   0 1 0 0
+# 0x24 = 0 1 1 0   0 0 1 0
 #        ^ ^ \ /   \--+--/
 #        | |  |       +------- CKSEL 3..0 (8M internal RC)
 #        | |  +--------------- SUT 1..0 (slowly rising power)
-#        | +------------------ BODEN (if 0, brown-out detector is enabled)
-#        +-------------------- BODLEVEL (if 0: 4V, if 1: 2.7V)
+#        | +------------------ CKOUT 
+#        +-------------------- CKDIV8 
 #
 # For computing fuse byte values for other devices and options see
 # the fuse bit calculator at http://www.engbedded.com/fusecalc/
