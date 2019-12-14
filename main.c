@@ -40,13 +40,16 @@ uint8_t isH20Loading;
 
 int main(void)
 {
+
+    set_output(PORTB,6);
+
     // enable global interrupts
     sei();
 
     while(1)
     {
-        output_high(PORTB,6);
-        //load_h20(660);
+        //output_high(PORTB,6);
+        load_h20(660);
     }
     return 0;               /* never reached */
 }
